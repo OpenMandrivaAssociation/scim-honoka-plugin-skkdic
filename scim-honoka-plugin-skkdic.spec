@@ -1,5 +1,5 @@
 %define version  0.9.1
-%define release  %mkrel 1
+%define release  %mkrel 2
 %define src_name honoka-plugin-skkdic
 
 %define honoka_version   0.9.0
@@ -15,7 +15,7 @@ Source0:    %{src_name}-%{version}.tar.bz2
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires:      skkdic
 BuildRequires: scim-honoka-devel >= %{honoka_version}
-BuildRequires: automake1.8
+BuildRequires: automake
 BuildRequires: libltdl-devel
 
 %description
@@ -24,10 +24,9 @@ An SKKdic search plugin for honoka.
 
 %prep
 %setup -q -n %{src_name}-%{version}
-cp /usr/share/automake-1.9/mkinstalldirs .
 
 %build
-[[ -f configure ]] || ./bootstrap
+./bootstrap
 
 %configure2_5x
 # (tv) parallel build is broken:
@@ -38,7 +37,7 @@ rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
 
 # remove devel files
-rm -f $RPM_BUILD_ROOT/%{_libdir}/scim-1.0/honoka/*.{a,la}
+rm -f $RPM_BUILD_ROOT/%{scim_plugins_dir}/honoka/*.{a,la}
 
 %find_lang honoka-plugin-skkdic
 
@@ -53,6 +52,4 @@ rm -rf $RPM_BUILD_ROOT
 %files -f honoka-plugin-skkdic.lang
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README.jp
-%{_libdir}/scim-1.0/honoka/*.so
-
-
+%{scim_plugins_dir}/honoka/*.so
